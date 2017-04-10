@@ -10,58 +10,50 @@
 #include <assert.h>
 #include <string.h>
 #include<iostream>
+#include <stdio.h>  
+
 // 唯一的应用程序对象
 
 using namespace std;
 
 HINSTANCE hInstLibrary;
+HINSTANCE hinstLib;
 
-char** str_split(char* a_str, const char a_delim)
-{
-	char** result = 0;
-	size_t count = 0;
-	char* tmp = a_str;
-	char* last_comma = 0;
-	char delim[2];
-	delim[0] = a_delim;
-	delim[1] = 0;
+void readConfig() {
 
-	/* Count how many elements will be extracted. */
-	while (*tmp)
-	{
-		if (a_delim == *tmp)
-		{
-			count++;
-			last_comma = tmp;
-		}
-		tmp++;
-	}
+	TCHAR lpPath[MAX_PATH] = _T(".\\config.ini");
+	//WritePrivateProfileString(TEXT("Hotel"), TEXT("IP"), TEXT("10.15.40.123"), lpPath);
+	//WritePrivateProfileString(TEXT("Hotel"), TEXT("Mask"), TEXT("255.255.255.0"), lpPath);
+	//WritePrivateProfileString(TEXT("Hotel"), TEXT("Gateway"), TEXT("10.15.40.1"), lpPath);
+	//WritePrivateProfileString(TEXT("Hotel"), TEXT("DNS"), TEXT("211.82.96.1"), lpPath);
 
-	/* Add space for trailing token. */
-	count += last_comma < (a_str + strlen(a_str) - 1);
+	//WritePrivateProfileString(TEXT("Match"), TEXT("IP"), TEXT("172.17.29.120"), lpPath);
+	//WritePrivateProfileString(TEXT("Match"), TEXT("Mask"), TEXT("255.255.255.0"), lpPath);
+	//WritePrivateProfileString(TEXT("Match"), TEXT("Gateway"), TEXT("172.17.29.1"), lpPath);
+	//WritePrivateProfileString(TEXT("Match"), TEXT("DNS"), TEXT("0.0.0.0"), lpPath);
 
-	/* Add space for terminating null string so caller
-	knows where the list of returned strings ends. */
-	count++;
-	char *next_token = NULL;
-	result = (char**)malloc(sizeof(char*) * count);
 
-	if (result)
-	{
-		size_t idx = 0;
-		char* token = strtok_s(a_str, delim, &next_token);
+	TCHAR Ip[16];
+	TCHAR Mask [16];
+	TCHAR Gateway[16];
+	TCHAR DNS[16];
 
-		while (token)
-		{
-			assert(idx < count);
-			*(result + idx++) = _strdup(token);
-			token = strtok_s(0, delim, &next_token);
-		}
-		assert(idx == count - 1);
-		*(result + idx) = 0;
-	}
+	GetPrivateProfileString(TEXT("Section"), TEXT("TYPE"), TEXT("NULL"), Ip, 100, lpPath);
+	//GetPrivateProfileString(TEXT("Match"), TEXT("Mask"), TEXT("NULL"), Mask, 100, lpPath);
+	//GetPrivateProfileString(TEXT("Match"), TEXT("Gateway"), TEXT("NULL"), Gateway, 100, lpPath);
+	//GetPrivateProfileString(TEXT("Match"), TEXT("DNS"), TEXT("NULL"), DNS, 100, lpPath);
 
-	return result;
+	_tprintf(_T("IP=%s\n"), Ip);
+	//_tprintf(_T("Mask=%s\n"), Mask);
+	//_tprintf(_T("Gateway=%s\n"), Gateway);
+	//_tprintf(_T("DNS=%s\n"), DNS);
+
+
+	/*delete[] lpPath;
+	delete[] Ip;
+	delete[] Mask;
+	delete[] Gateway;
+	delete[] DNS;*/
 }
 
 vector<string> split(const string &s, const string &seperator) {
@@ -113,7 +105,9 @@ int main(int argc, char *argv[])
 
 		} else {
 			//printf("param cnt->%d\n", argc);
-			hInstLibrary = LoadLibrary(L"BDMFCSerial.dll");
+			hinstLib = LoadLibrary(TEXT("BDATLSerial.dll"));
+			//hInstLibrary = LoadLibrary(L"BDMFCSerial.dll");
+
 			if (hInstLibrary)
 			{
 	
@@ -299,6 +293,12 @@ int main(int argc, char *argv[])
 		nRetCode = -2;
 		desc = "错误: 代码抛出异常 失败";
 	}
-	printf("code:%d,desc:%s", nRetCode,desc);
+	printf("code:%d,desc:%s\n", nRetCode,desc);
+	pfnImportingDLL fnImportingDLL = NULL;
+	fnImportingDLL = (pfnImportingDLL)GetProcAddress(hinstLib, "fnImportingDLL");
+	if(fnImportingDLL) fnImportingDLL();
+	//FreeLibrary(hInstLibrary);
+	FreeLibrary(hinstLib);
+	//readConfig();
     return nRetCode;
 }

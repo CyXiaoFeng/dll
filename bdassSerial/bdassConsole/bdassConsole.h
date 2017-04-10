@@ -7,11 +7,17 @@
 #define IS_goodsSellCase 3
 #define	IS_CoorDinateHome 4
 #define IS_PreposeMotorHome 5
-
+/*
+the follow typedef from BDMFCSerial
+*/
 typedef int(_cdecl * goodsReset)();
 typedef int(_cdecl * CoorDinateCaseGood)(int, int);
 typedef int(_cdecl * PreposeMotorCase)(int);
 typedef int(_cdecl * goodsSellCase)(int, int, int);
 typedef int(_cdecl * CoorDinateHome)(int, int);
 typedef int(_cdecl * PreposeMotorHome)(int);
-
+/*
+the follow typedef from BDATLSerial
+*/
+typedef int(_cdecl* AtlGoodsReset)();
+typedef int(*pfnImportingDLL)();

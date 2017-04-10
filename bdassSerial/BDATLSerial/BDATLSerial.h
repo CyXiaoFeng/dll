@@ -4,6 +4,9 @@
 // 任何其他项目上不应定义此符号。这样，源文件中包含此文件的任何其他项目都会将
 // BDATLSERIAL_API 函数视为是从 DLL 导入的，而此 DLL 则将用此宏定义的
 // 符号视为是被导出的。
+#ifdef __cplusplus    // If used by C++ code,   
+extern "C" {          // we need to export the C interface  
+#endif  
 #ifdef BDATLSERIAL_EXPORTS
 #define BDATLSERIAL_API __declspec(dllexport)
 #else
@@ -20,3 +23,26 @@ public:
 extern BDATLSERIAL_API int nBDATLSerial;
 
 BDATLSERIAL_API int fnBDATLSerial(void);
+
+//货道复位
+BDATLSERIAL_API int goodsReset();
+
+//电机测试后置和左右电机
+BDATLSERIAL_API int CoorDinateCaseGood(int, int);
+
+//电机测试前置电机
+
+BDATLSERIAL_API  int PreposeMotorCase(int ZLine);
+
+//出货指令
+BDATLSERIAL_API int goodsSellCase(int, int, int);
+
+//后置和左右归位
+BDATLSERIAL_API  int CoorDinateHome(int, int);
+
+//前置电机归位
+BDATLSERIAL_API  int PreposeMotorHome(int);
+
+#ifdef __cplusplus  
+}
+#endif 
