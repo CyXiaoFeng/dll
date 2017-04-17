@@ -48,6 +48,19 @@ BDMFCSERIAL_API  int CoorDinateHome(int , int );
 //前置电机归位
 BDMFCSERIAL_API  int PreposeMotorHome(int);
 
+//货道状态
+/*
+14:出货成功
+19 没有该列 
+20 没有该层 
+21：表示货道忙碌
+22:需要人工处理(电机故障) 
+25:出货失败 26：传感器故障
+27：货物被取走(货物已掉出但是没有归位)
+29:关门失败,不能进行下次出货
+*/
+BDMFCSERIAL_API  int goodsStatus();
+
 #ifdef __cplusplus  
 }
 #endif 

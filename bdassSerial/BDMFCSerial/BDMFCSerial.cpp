@@ -84,3 +84,8 @@ BDMFCSERIAL_API int PreposeMotorHome(int ZLine)
 {
 	return m_goodsDevice->PreposeMotorHome(ZLine);
 }
+
+BDMFCSERIAL_API int goodsStatus()
+{
+	return m_goodsDevice->goodsStatus();
+}

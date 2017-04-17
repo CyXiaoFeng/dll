@@ -16,54 +16,6 @@ using namespace std;
 
 HINSTANCE hInstLibrary;
 
-char** str_split(char* a_str, const char a_delim)
-{
-	char** result = 0;
-	size_t count = 0;
-	char* tmp = a_str;
-	char* last_comma = 0;
-	char delim[2];
-	delim[0] = a_delim;
-	delim[1] = 0;
-
-	/* Count how many elements will be extracted. */
-	while (*tmp)
-	{
-		if (a_delim == *tmp)
-		{
-			count++;
-			last_comma = tmp;
-		}
-		tmp++;
-	}
-
-	/* Add space for trailing token. */
-	count += last_comma < (a_str + strlen(a_str) - 1);
-
-	/* Add space for terminating null string so caller
-	knows where the list of returned strings ends. */
-	count++;
-	char *next_token = NULL;
-	result = (char**)malloc(sizeof(char*) * count);
-
-	if (result)
-	{
-		size_t idx = 0;
-		char* token = strtok_s(a_str, delim, &next_token);
-
-		while (token)
-		{
-			assert(idx < count);
-			*(result + idx++) = _strdup(token);
-			token = strtok_s(0, delim, &next_token);
-		}
-		assert(idx == count - 1);
-		*(result + idx) = 0;
-	}
-
-	return result;
-}
-
 vector<string> split(const string &s, const string &seperator) {
 	vector<string> result;
 	typedef string::size_type string_size;
