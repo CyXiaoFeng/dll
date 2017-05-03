@@ -3,25 +3,36 @@
 
 #include "stdafx.h"
 #include "BDMFCSerial.h"
-
+#include <stdio.h>  
+#include <direct.h>  
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-
+#define BUFSIZE MAX_PATH
 // 唯一的应用程序对象
 
 CWinApp theApp;
 using namespace PointingDevice;
 using namespace std;
 System::String^ getConfig(TCHAR *second) {
-	TCHAR lpPath[MAX_PATH] = _T(".\\config.ini");
+	
+	CString strCurPath;
+	GetModuleFileName(NULL, strCurPath.GetBuffer(MAX_PATH), MAX_PATH);
+	strCurPath.ReleaseBuffer();//Must ReleaseBuffer, or GetLength=0
+	int pos = strCurPath.ReverseFind(_T('\\'));
+	int len = strCurPath.GetLength();
+	strCurPath = strCurPath.Left(pos+1);
+	strCurPath.Format(_T("%sconfig.ini"), strCurPath);
+	//_tprintf(_T("Path=%s\n"), strCurPath);
+
 	TCHAR Value[10];
-	GetPrivateProfileString(TEXT("Section"), second, TEXT("NULL"), Value, 10, lpPath);
+	GetPrivateProfileString(TEXT("Section"), second, TEXT("NULL"), Value, 10, strCurPath);
 	//_tprintf(_T("Value=%s\n"), Value);
 	return gcnew System::String(Value);
 }
 
+//gcroot<PointingDevice::GoodsDevice^> m_goodsDevice = gcnew PointingDevice::GoodsDevice("GOODS2", "COM4", "9600");
 gcroot<PointingDevice::GoodsDevice^> m_goodsDevice = gcnew PointingDevice::GoodsDevice(getConfig(TEXT("TYPE"))/*"GOODS2"*/,
 	getConfig(TEXT("COM")), getConfig(TEXT("RATE")));
 int main()
