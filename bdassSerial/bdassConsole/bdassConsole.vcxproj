@@ -167,9 +167,6 @@
     <ResourceCompile Include="bdassConsole.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BDATLSerial\BDATLSerial.vcxproj">
-      <Project>{cd1b2e04-3e98-4463-8cdf-60f4077a34e5}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\BDMFCSerial\BDMFCSerial.vcxproj">
       <Project>{d3d3e98d-49a4-4989-8d21-2fef3eebc736}</Project>
     </ProjectReference>
